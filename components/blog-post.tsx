@@ -1,6 +1,5 @@
 import type { BlogPost } from "@/lib/blog-data"
 import React from "react"
-import Link from "next/link"
 
 interface BlogPostProps {
   post: BlogPost
@@ -21,7 +20,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
         blocks.push(
           <p
             key={`p-${blocks.length}`}
-            style={{ margin: "0 0 15px 0", maxWidth: "100%", whiteSpace: "pre-wrap" }}
+            style={{ margin: "0 0 15px 0", maxWidth: "100%", whiteSpace: "pre-wrap", color: "#333333" }}
           >
             {buffer.join("\n")}
           </p>
@@ -91,6 +90,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
             fontSize: "18px",
             margin: "0 0 10px 0",
             fontStyle: "italic",
+            color: "#333333",
           }}
         >
           {post.title}
@@ -101,11 +101,11 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
             fontWeight: "normal",
             fontSize: "18px",
             margin: "0 0 10px 0",
+            fontStyle: "italic",
+            color: "#333333"
           }}
         >
-          <Link href={`/post/${post.id}`} style={{ fontStyle: "italic" }}>
-            {post.title}
-          </Link>
+          {post.title}
         </h2>
       )}
 
