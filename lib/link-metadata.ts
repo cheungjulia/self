@@ -50,8 +50,51 @@ function extractMetadata(html: string, url: string): LinkMetadata {
   }
 }
 
+// Handle X.com/Twitter via oEmbed (their public API)
+async function fetchTwitterMetadata(url: string): Promise<LinkMetadata> {
+  const domain = "x.com"
+  try {
+    const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(url)}`
+    const response = await fetch(oembedUrl, {
+      next: { revalidate: 86400 },
+    })
+    
+    if (!response.ok) {
+      // Fallback: extract username from URL
+      const match = url.match(/(?:x\.com|twitter\.com)\/([^\/\?]+)/)
+      const username = match?.[1]
+      return { url, title: username ? `@${username}` : null, description: null, domain }
+    }
+
+    const data = await response.json()
+    // oEmbed returns author_name (username) and html (tweet content)
+    const author = data.author_name ?? null
+    // Extract text from tweet HTML (remove links and tags), then decode entities
+    const rawText = data.html
+      ?.replace(/<[^>]+>/g, "")
+      ?.replace(/&mdash;.*$/, "")
+      ?.trim()
+    const tweetText = rawText ? decodeHtmlEntities(rawText).slice(0, 80) : null
+    
+    return {
+      url,
+      title: tweetText || (author ? `@${author}` : null),
+      description: author ? `@${author}` : null,
+      domain,
+    }
+  } catch {
+    return { url, title: null, description: null, domain }
+  }
+}
+
 export async function fetchLinkMetadata(url: string): Promise<LinkMetadata> {
-  const domain = new URL(url).hostname.replace(/^www\./, "")
+  const parsedUrl = new URL(url)
+  const domain = parsedUrl.hostname.replace(/^www\./, "")
+  
+  // Special handling for X.com / Twitter
+  if (domain === "x.com" || domain === "twitter.com") {
+    return fetchTwitterMetadata(url)
+  }
   
   try {
     const response = await fetch(url, {
