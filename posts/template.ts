@@ -15,4 +15,8 @@ export const post: RawPost = {
   // time: "10:30 AM",  // optional - auto-generated from file save time if omitted
   location: "",
   content: ``,
+  // sources: [
+  //   "https://example.com/article",
+  //   "Some note or context",
+  // ],
 }

@@ -12,4 +12,9 @@ export const post: RawPost = {
 	- i think we'll see the return of the retro: unoptimised spaces, in-person interactions, grassroots community building. think the old myspace, or facebook in 2010s where we posted on one other's walls
 	- strava-style connection is what we're looking for: small circles, close friends, un-curated, authentic
   `,
+  sources: [
+	"not directly, but made me think of byun chul han and his thoughts on digital society, a good summary here: https://rhizomes.net/issue32/reviews/ivey.html",
+	"been a while since i read trisha low's socialist realism, but the way she describes the internet then -- that era of myspace, neon colours and raw html",
+	"additional thought: at one point all internet was opensource, until paywalls, auth, password protection etc. were introduced as we publicised our selves. "
+  ]
 }

@@ -6,7 +6,45 @@ interface BlogPostProps {
   isFullView?: boolean
 }
 
+// Simple URL regex to detect links
+const URL_REGEX = /https?:\/\/[^\s]+/g
+
 export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
+  // Render a source item - auto-link URLs within text
+  const renderSourceItem = (source: string, index: number) => {
+    const parts: React.ReactNode[] = []
+    let lastIndex = 0
+    let match
+
+    URL_REGEX.lastIndex = 0
+    while ((match = URL_REGEX.exec(source)) !== null) {
+      // Add text before the URL
+      if (match.index > lastIndex) {
+        parts.push(source.slice(lastIndex, match.index))
+      }
+      // Add the URL as a link
+      const url = match[0]
+      parts.push(
+        <a
+          key={`link-${index}-${match.index}`}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#666666" }}
+        >
+          {url}
+        </a>
+      )
+      lastIndex = match.index + url.length
+    }
+    // Add remaining text after last URL
+    if (lastIndex < source.length) {
+      parts.push(source.slice(lastIndex))
+    }
+
+    return parts.length > 0 ? parts : source
+  }
+
   // Convert content string into blocks: paragraphs and bullet lists
   const renderContent = (content: string) => {
     const lines = content.split(/\r?\n/)
@@ -37,6 +75,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
             style={{
               margin: "0 0 15px 0",
               paddingLeft: "1.5em",
+              color: "#333333",
               listStyleType: "disc",
               maxWidth: "100%",
             }}
@@ -123,6 +162,21 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
       </p>
 
       {renderContent(post.content)}
+
+      {post.sources && post.sources.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          <p style={{ fontSize: "11px", color: "#888888", margin: "0 0 8px 0", fontFamily: "monospace" }}>
+            sources and more
+          </p>
+          <ol style={{ margin: 0, paddingLeft: "1.5em", fontSize: "10px", color: "#666666", fontFamily: "sans-serif", listStyleType: "decimal", listStylePosition: "outside" }}>
+            {post.sources.map((source, i) => (
+              <li key={`source-${i}`} style={{ marginBottom: "4px", wordBreak: "break-word", paddingLeft: "0.3em" }}>
+                {renderSourceItem(source, i)}
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
     </article>
   )
 }

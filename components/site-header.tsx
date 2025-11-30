@@ -11,7 +11,7 @@ export function SiteHeader() {
         }}
       >
         <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-          thoughts.txt by 慧慧
+          elevator convos with 慧慧
         </Link>
       </h1>
       <p

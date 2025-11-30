@@ -5,6 +5,7 @@ export interface BlogPost {
   time?: string
   location: string
   content: string
+  sources?: string[]
 }
 
 // Raw post type - what you write in post files (id and date are auto-generated)
@@ -13,6 +14,7 @@ export interface RawPost {
   location: string
   content: string
   time?: string
+  sources?: string[]  // array of URLs or free text - URLs are auto-linked
 }
 
 import { posts } from "@/posts"
