@@ -29,7 +29,8 @@ export function LinkPreview({ url, prefixText, fetchMetadata }: LinkPreviewProps
         target="_blank"
         rel="noopener noreferrer"
         style={{
-          display: "inline-block",
+          display: "inline-flex",
+          maxWidth: "100%",
           padding: "2px 6px",
           background: "#f5f5f5",
           border: "1px solid #ddd",
@@ -38,15 +39,22 @@ export function LinkPreview({ url, prefixText, fetchMetadata }: LinkPreviewProps
           color: "#555",
           textDecoration: "none",
           verticalAlign: "middle",
+          overflow: "hidden",
         }}
         title={url}
       >
         {loading ? (
           <span style={{ color: "#999" }}>↗ {domain}</span>
         ) : metadata?.title ? (
-          <span>
-            ↗ {metadata.title.length > 50 ? metadata.title.slice(0, 50) + "…" : metadata.title}
-            <span style={{ color: "#999", marginLeft: "4px" }}>({domain})</span>
+          <span
+            style={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            ↗ {metadata.title}
+            <span style={{ color: "#999", marginLeft: "4px", flexShrink: 0 }}>({domain})</span>
           </span>
         ) : (
           <span>↗ {domain}</span>
