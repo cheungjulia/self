@@ -1,4 +1,6 @@
 import type { BlogPost } from "@/lib/blog-data"
+import { fetchLinkMetadata } from "@/lib/link-metadata"
+import { LinkPreview } from "./link-preview"
 import React from "react"
 
 interface BlogPostProps {
@@ -10,39 +12,27 @@ interface BlogPostProps {
 const URL_REGEX = /https?:\/\/[^\s]+/g
 
 export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
-  // Render a source item - auto-link URLs within text
+  // Render a source item with link preview
   const renderSourceItem = (source: string, index: number) => {
-    const parts: React.ReactNode[] = []
-    let lastIndex = 0
-    let match
-
     URL_REGEX.lastIndex = 0
-    while ((match = URL_REGEX.exec(source)) !== null) {
-      // Add text before the URL
-      if (match.index > lastIndex) {
-        parts.push(source.slice(lastIndex, match.index))
-      }
-      // Add the URL as a link
-      const url = match[0]
-      parts.push(
-        <a
-          key={`link-${index}-${match.index}`}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#666666" }}
-        >
-          {url}
-        </a>
-      )
-      lastIndex = match.index + url.length
-    }
-    // Add remaining text after last URL
-    if (lastIndex < source.length) {
-      parts.push(source.slice(lastIndex))
+    const match = URL_REGEX.exec(source)
+
+    if (!match) {
+      // No URL found, return plain text
+      return source
     }
 
-    return parts.length > 0 ? parts : source
+    const url = match[0]
+    const prefixText = match.index > 0 ? source.slice(0, match.index).trim() : undefined
+
+    return (
+      <LinkPreview
+        key={`link-${index}`}
+        url={url}
+        prefixText={prefixText}
+        fetchMetadata={fetchLinkMetadata}
+      />
+    )
   }
 
   // Convert content string into blocks: paragraphs and bullet lists
