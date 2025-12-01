@@ -6,20 +6,6 @@ export default function AboutPage() {
   return (
     <main>
       <SiteHeader />
-
-      <h2
-        style={{
-          fontFamily: "var(--font-noto-serif-hk), var(--font-playfair), Georgia, serif",
-          fontWeight: 400,
-          fontSize: "20px",
-          margin: "0 0 24px 0",
-          color: "var(--foreground)",
-          letterSpacing: "0.02em",
-        }}
-      >
-        me
-      </h2>
-
       <Image
         src="/teahouse_hk.jpg"
         alt="Hong Kong teahouse"
@@ -33,6 +19,20 @@ export default function AboutPage() {
         }}
       />
 
+<h2
+        style={{
+          fontFamily: "var(--font-noto-serif-hk), var(--font-playfair), Georgia, serif",
+          fontWeight: 400,
+          fontSize: "20px",
+          margin: "0 0 15px 0",
+          color: "var(--foreground)",
+          letterSpacing: "0.02em",
+        }}
+      >
+        julia, 1999
+      </h2>
+      
+
       <div 
         className="post-content fade-up"
         style={{ maxWidth: "100%" }}
@@ -44,11 +44,11 @@ export default function AboutPage() {
             lineHeight: 1.85,
           }}
         >
-          - hong kong born, lived in US, thailand, prague.<br />
-          - sometimes obsessive. too overthinky.<br />
-          - no clue what the meaning of life is and is ok with it mostly.<br />
-          - discovered a moth species when in the amazons.<br />
-          - easily hangry.
+          - hong kong born, lived in US, thailand, prague<br />
+          - discovered a moth species when in the amazons<br />
+          - data scientist-ish, ai engineer-ish<br />
+          - easily hangry<br />
+          - avid documenter, but hasnt figured out the best way to do it
         </p>
 
         <p 

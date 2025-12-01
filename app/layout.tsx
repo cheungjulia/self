@@ -20,8 +20,8 @@ const notoSerifHK = Noto_Serif_HK({
 })
 
 export const metadata: Metadata = {
-  title: "elevator convos",
-  description: "a weblog, est. 2025",
+  title: "thoughts.txt",
+  description: "things and thoughts and artefacts",
   generator: 'v0.app'
 }
 
