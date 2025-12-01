@@ -7,7 +7,7 @@ export default function Home() {
   const posts = getAllPosts()
 
   return (
-    <main style={{ maxWidth: "600px", margin: "0 auto" }}>
+    <main>
       <SiteHeader />
 
       <section>

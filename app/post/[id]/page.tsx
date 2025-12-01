@@ -25,11 +25,28 @@ export default async function PostPage({
   }
 
   return (
-    <main style={{ maxWidth: "600px", margin: "0 auto" }}>
+    <main>
       <SiteHeader />
 
-      <p style={{ fontSize: "12px", marginBottom: "30px" }}>
-        <Link href="/">← back to all posts</Link>
+      <p 
+        className="fade-up"
+        style={{ 
+          fontSize: "12px", 
+          marginBottom: "32px",
+        }}
+      >
+        <Link 
+          href="/"
+          style={{
+            color: "var(--foreground-subtle)",
+            textDecoration: "none",
+            fontFamily: "'Courier New', monospace",
+            letterSpacing: "0.05em",
+            transition: "color 0.2s ease",
+          }}
+        >
+          ← back to all posts
+        </Link>
       </p>
 
       <BlogPostComponent post={post} isFullView />

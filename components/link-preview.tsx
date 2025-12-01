@@ -23,28 +23,30 @@ export function LinkPreview({ url, prefixText, fetchMetadata }: LinkPreviewProps
 
   return (
     <span>
-      {prefixText && <span>{prefixText} </span>}
+      {prefixText && <span style={{ color: "var(--foreground-muted)" }}>{prefixText} </span>}
       <a
         href={url}
         target="_blank"
         rel="noopener noreferrer"
+        className="film-link"
         style={{
           display: "inline-flex",
           maxWidth: "100%",
-          padding: "2px 6px",
-          background: "#f5f5f5",
-          border: "1px solid #ddd",
-          fontFamily: "monospace",
+          padding: "3px 8px",
+          background: "var(--background-dark)",
+          border: "1px solid var(--border-color)",
+          fontFamily: "'Courier New', monospace",
           fontSize: "9px",
-          color: "#555",
+          color: "var(--foreground-muted)",
           textDecoration: "none",
           verticalAlign: "middle",
           overflow: "hidden",
+          transition: "all 0.2s ease",
         }}
         title={url}
       >
         {loading ? (
-          <span style={{ color: "#999" }}>↗ {domain}</span>
+          <span style={{ color: "var(--foreground-subtle)" }}>↗ {domain}</span>
         ) : metadata?.title ? (
           <span
             style={{
@@ -54,7 +56,7 @@ export function LinkPreview({ url, prefixText, fetchMetadata }: LinkPreviewProps
             }}
           >
             ↗ {metadata.title}
-            <span style={{ color: "#999", marginLeft: "4px", flexShrink: 0 }}>({domain})</span>
+            <span style={{ color: "var(--foreground-subtle)", marginLeft: "4px", flexShrink: 0 }}>({domain})</span>
           </span>
         ) : (
           <span>↗ {domain}</span>
@@ -63,4 +65,3 @@ export function LinkPreview({ url, prefixText, fetchMetadata }: LinkPreviewProps
     </span>
   )
 }
-

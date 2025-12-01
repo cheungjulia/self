@@ -1,25 +1,16 @@
 export function SiteFooter() {
   return (
-    <footer style={{ marginTop: "60px", paddingTop: "20px" }}>
+    <footer style={{ marginTop: "72px", paddingTop: "24px", position: "relative" }}>
       <hr />
+      
       <p
+        className="footer-text"
         style={{
-          fontSize: "11px",
-          color: "#666666",
-          fontFamily: "'Courier New', Courier, monospace",
-        }}
-      >
-        you've reached the end. maybe this is where you'll begin.
-  
-      </p>
-      <p
-        style={{
-          fontSize: "10px",
-          color: "#999999",
           marginTop: "20px",
+          textAlign: "center",
         }}
       >
-        ◇
+        fin
       </p>
     </footer>
   )

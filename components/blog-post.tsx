@@ -48,7 +48,14 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
         blocks.push(
           <p
             key={`p-${blocks.length}`}
-            style={{ margin: "0 0 15px 0", maxWidth: "100%", whiteSpace: "pre-wrap", color: "#333333" }}
+            className="fade-up"
+            style={{ 
+              margin: "0 0 1.2em 0", 
+              maxWidth: "100%", 
+              whiteSpace: "pre-wrap", 
+              color: "var(--foreground-muted)",
+              lineHeight: 1.7,
+            }}
           >
             {buffer.join("\n")}
           </p>
@@ -62,16 +69,18 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
         blocks.push(
           <ul
             key={`ul-${blocks.length}`}
+            className="fade-up"
             style={{
-              margin: "0 0 15px 0",
+              margin: "0 0 1.2em 0",
               paddingLeft: "1.5em",
-              color: "#333333",
+              color: "var(--foreground-muted)",
               listStyleType: "disc",
               maxWidth: "100%",
+              lineHeight: 1.85,
             }}
           >
             {listBuffer.map((item, i) => (
-              <li key={`li-${blocks.length}-${i}`}>{item}</li>
+              <li key={`li-${blocks.length}-${i}`} style={{ marginBottom: "0.3em" }}>{item}</li>
             ))}
           </ul>
         )
@@ -111,56 +120,67 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
   }
 
   return (
-    <article style={{ marginBottom: "40px" }}>
-      {isFullView ? (
-        <h2
-          style={{
-            fontWeight: "normal",
-            fontSize: "18px",
-            margin: "0 0 10px 0",
-            fontStyle: "italic",
-            color: "#333333",
-          }}
-        >
-          {post.title}
-        </h2>
-      ) : (
-        <h2
-          style={{
-            fontWeight: "normal",
-            fontSize: "18px",
-            margin: "0 0 10px 0",
-            fontStyle: "italic",
-            color: "#333333"
-          }}
-        >
-          {post.title}
-        </h2>
-      )}
+    <article style={{ marginBottom: "48px" }}>
+      <h2
+        className="post-title"
+        style={{
+          fontFamily: "var(--font-noto-serif-hk), var(--font-playfair), Georgia, serif",
+          fontWeight: 400,
+          fontSize: "20px",
+          margin: "0 0 12px 0",
+          letterSpacing: "0.02em",
+          color: "var(--foreground)",
+          lineHeight: 1.4,
+        }}
+      >
+        {post.title}
+      </h2>
 
       <p
+        className="post-meta"
         style={{
-          fontSize: "12px",
-          color: "#666666",
-          margin: "0 0 15px 0",
+          fontSize: "11px",
+          color: "var(--foreground-subtle)",
+          margin: "0 0 20px 0",
           fontFamily: "'Courier New', Courier, monospace",
+          letterSpacing: "0.05em",
         }}
       >
         {post.date} · {post.time}
         <br />
-        {post.location}
+        <span style={{ opacity: 0.8 }}>{post.location}</span>
       </p>
 
-      {renderContent(post.content)}
+      <div className="post-content">
+        {renderContent(post.content)}
+      </div>
 
       {post.sources && post.sources.length > 0 && (
-        <div style={{ marginTop: "20px" }}>
-          <p style={{ fontSize: "11px", color: "#888888", margin: "0 0 8px 0", fontFamily: "monospace" }}>
-            sources and more
+        <div className="sources-section">
+          <p className="sources-label">
+            sources & more
           </p>
-          <ol style={{ margin: 0, paddingLeft: "1.5em", fontSize: "10px", color: "#666666", fontFamily: "sans-serif", listStyleType: "decimal", listStylePosition: "outside" }}>
+          <ol 
+            style={{ 
+              margin: 0, 
+              paddingLeft: "1.5em", 
+              fontSize: "11px", 
+              color: "var(--foreground-subtle)", 
+              fontFamily: "'Courier New', monospace", 
+              listStyleType: "decimal", 
+              listStylePosition: "outside",
+              lineHeight: 1.8,
+            }}
+          >
             {post.sources.map((source, i) => (
-              <li key={`source-${i}`} style={{ marginBottom: "4px", wordBreak: "break-word", paddingLeft: "0.3em" }}>
+              <li 
+                key={`source-${i}`} 
+                style={{ 
+                  marginBottom: "6px", 
+                  wordBreak: "break-word", 
+                  paddingLeft: "0.3em" 
+                }}
+              >
                 {renderSourceItem(source, i)}
               </li>
             ))}
