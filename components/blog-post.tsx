@@ -8,6 +8,34 @@ interface BlogPostProps {
   isFullView?: boolean
 }
 
+// Parse inline <b> and <i> tags into React elements
+const parseInlineFormatting = (text: string): React.ReactNode => {
+  const regex = /<(b|i)>(.*?)<\/\1>/g
+  const parts: React.ReactNode[] = []
+  let lastIndex = 0
+  let match
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index))
+    }
+    const [, tag, content] = match
+    const key = `${tag}-${match.index}`
+    parts.push(
+      tag === "b" 
+        ? <strong key={key}>{parseInlineFormatting(content)}</strong>
+        : <em key={key}>{parseInlineFormatting(content)}</em>
+    )
+    lastIndex = regex.lastIndex
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex))
+  }
+
+  return parts.length === 1 ? parts[0] : parts
+}
+
 // Simple URL regex to detect links
 const URL_REGEX = /https?:\/\/[^\s]+/g
 
@@ -57,7 +85,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
               lineHeight: 1.7,
             }}
           >
-            {buffer.join("\n")}
+            {parseInlineFormatting(buffer.join("\n"))}
           </p>
         )
         buffer = []
@@ -80,7 +108,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
             }}
           >
             {listBuffer.map((item, i) => (
-              <li key={`li-${blocks.length}-${i}`} style={{ marginBottom: "0.3em" }}>{item}</li>
+              <li key={`li-${blocks.length}-${i}`} style={{ marginBottom: "0.3em" }}>{parseInlineFormatting(item)}</li>
             ))}
           </ul>
         )

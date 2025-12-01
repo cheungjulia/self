@@ -1,6 +1,5 @@
 import Image from "next/image"
 import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
 
 export default function AboutPage() {
   return (

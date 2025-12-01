@@ -1,5 +1,4 @@
 import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
 import { getAllPosts } from "@/lib/blog-data"
 import Link from "next/link"
 
