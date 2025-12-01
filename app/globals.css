@@ -90,10 +90,8 @@
 
 /* Navigation */
 .nav-link {
-  text-decoration: none;
   color: var(--foreground-muted);
-  font-size: 13px;
-  letter-spacing: 0.1em;
+  text-decoration: underline;
   text-transform: lowercase;
 }
 

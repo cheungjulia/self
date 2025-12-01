@@ -54,8 +54,6 @@ export default function ArchivePage() {
           </li>
         ))}
       </ul>
-
-      <SiteFooter />
     </main>
   )
 }

@@ -61,8 +61,6 @@ export default function AboutPage() {
           you can probably reach me on X @creaturewai. no promises tho.
         </p>
       </div>
-
-      <SiteFooter />
     </main>
   )
 }

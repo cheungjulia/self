@@ -74,7 +74,7 @@ async function fetchTwitterMetadata(url: string): Promise<LinkMetadata> {
       ?.replace(/<[^>]+>/g, "")
       ?.replace(/&mdash;.*$/, "")
       ?.trim()
-    const tweetText = rawText ? decodeHtmlEntities(rawText).slice(0, 90) : null
+    const tweetText = rawText ? decodeHtmlEntities(rawText).slice(0, 93) : null
     
     return {
       url,

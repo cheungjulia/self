@@ -23,7 +23,7 @@ export function LinkPreview({ url, prefixText, fetchMetadata }: LinkPreviewProps
 
   return (
     <span>
-      {prefixText && <span style={{ color: "var(--foreground-muted)" }}>{prefixText} </span>}
+      {prefixText && <span>{prefixText} </span>}
       <a
         href={url}
         target="_blank"
