@@ -133,7 +133,7 @@
 .sources-label {
   font-family: "Courier New", monospace;
   font-size: 10px;
-  color: var(--foreground-subtle);
+  color: var(--foreground-muted);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 12px;

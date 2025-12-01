@@ -165,7 +165,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
               margin: 0, 
               paddingLeft: "1.5em", 
               fontSize: "11px", 
-              color: "var(--foreground-subtle)", 
+              color: "var(--foreground-muted)", 
               fontFamily: "'Courier New', monospace", 
               listStyleType: "decimal", 
               listStylePosition: "outside",

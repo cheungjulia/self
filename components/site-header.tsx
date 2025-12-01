@@ -24,7 +24,7 @@ export function SiteHeader() {
                 transition: "opacity 0.2s ease",
               }}
             >
-              elevator convos with 慧慧
+              thoughts.txt [慧慧]
             </Link>
           </h1>
           
