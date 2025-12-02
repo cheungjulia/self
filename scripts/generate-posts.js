@@ -43,6 +43,14 @@ function formatTime(date) {
   return `${hours}:${minutesStr} ${ampm}`
 }
 
+function extractTimeFromPost(filePath) {
+  // Read the post file and try to extract a time field
+  const content = fs.readFileSync(filePath, 'utf8')
+  // Match time: "..." or time: '...' in the post export
+  const timeMatch = content.match(/time:\s*["']([^"']+)["']/)
+  return timeMatch ? timeMatch[1] : null
+}
+
 function parsePostPath(filePath) {
   // Extract year/month/day from path like posts/2025/11/24.ts
   const relativePath = path.relative(POSTS_DIR, filePath)
@@ -58,9 +66,13 @@ function parsePostPath(filePath) {
   const m = parseInt(month)
   const d = parseInt(day)
   
-  // Get file modification time for auto-generated time
-  const stats = fs.statSync(filePath)
-  const time = formatTime(stats.mtime)
+  // Try to get time from the post file first, fall back to file mtime
+  let time = extractTimeFromPost(filePath)
+  if (!time) {
+    const stats = fs.statSync(filePath)
+    time = formatTime(stats.mtime)
+    console.log(`Note: ${relativePath} has no explicit time, using file mtime: ${time}`)
+  }
   
   return {
     year: y,

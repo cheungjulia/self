@@ -2,6 +2,7 @@ import type { RawPost } from "@/lib/blog-data"
 
 export const post: RawPost = {
   title: "china-us decoupling, on the ground",
+  time: "4:33 PM",
   location: "back in hk, a little existential",
   content: `
   i first heard the phrase "china-us decoupling" as a junior at berkeley [1]. that was 6 years ago. since then, the phrase has been tossed by media outlets and gnawed on by economists and friends [2,3 to show a few examples]. i never thought too much about it, but recently moving between hk/shenzhen and US, i feel like i have to adopt a new set of lingo, learn two separate UI flows, download two sets of apps, with each place:    

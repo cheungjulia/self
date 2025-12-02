@@ -2,6 +2,7 @@ import type { RawPost } from "@/lib/blog-data"
 
 export const post: RawPost = {
   title: "what should last?",
+  time: "10:43 PM",
   location: "causeway bay at deskone",
   content: `
   i enjoyed this article whilst having my morning coffee:

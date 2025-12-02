@@ -2,6 +2,7 @@ import type { RawPost } from "@/lib/blog-data"
 
 export const post: RawPost = {
   title: "robots in the wild",
+  time: "4:37 PM",
   location: "on a taxi in shenzhen heading back to hk through futian",
   content: `massive traffic, and my dad chuckles to himself and says "must be a self driving car glitching out up front". he turns to my mum: "with the way you drive, maybe it's trained on your data".
 

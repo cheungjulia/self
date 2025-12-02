@@ -2,6 +2,7 @@ import type { RawPost } from "@/lib/blog-data"
 
 export const post: RawPost = {
   title: "genai homogenising thought and power, internet as abundance and connection",
+  time: "4:36 PM",
   location: "about to head to day of service hk",
   content: `the internet allowed for massive decentralisation of voices, opinions, perspectives, but also infinite connection for folks using network effects. you can find blogs with 1 view, videos from the 2000s of a skater kid, tumblr journal entries, recipes half written... fragmented by design where the long tail thrived. genAI is now doing the opposite. no one goes to google for search, they go to chatgpt for their query and chatgpt uses the "top 10 relevant results", summarises and blends the individual authors' voices into the murky brown of mixed paint, and provides you the result. it abstracts and regurgitates the mess. likely you won't fact check it. likely you won't click into the sources. what does this mean for us? what does this mean for the internet? the internet is no longer a place for us to connect, and voices of the "influential", the ones with higher SOE, higher views, to get control. i mean in a way the internet is a reflection of society.
 	- <b>openai, anthropic beginning to create these product platforms</b>: e.g. you can book hotels directly in chat, you can make a list of shopping options, plan your tour. pure productivity optimisation, convenience brainrot, let us do this for you, offload your cognition, full personal assistant, or just a person, you?
