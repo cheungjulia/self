@@ -185,6 +185,16 @@
   letter-spacing: 0.03em;
 }
 
+/* Content Link Preview */
+.content-link-preview:hover {
+  border-color: var(--border-dark);
+  background: #f0f0f0;
+}
+
+.content-link-preview:visited {
+  color: inherit;
+}
+
 /* Animation */
 .fade-up {
   animation: fadeIn 0.6s ease-out backwards;

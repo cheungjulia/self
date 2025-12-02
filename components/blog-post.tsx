@@ -1,6 +1,7 @@
 import type { BlogPost } from "@/lib/blog-data"
 import { fetchLinkMetadata } from "@/lib/link-metadata"
 import { LinkPreview } from "./link-preview"
+import { ContentLinkPreview } from "./content-link-preview"
 import React from "react"
 
 interface BlogPostProps {
@@ -38,6 +39,12 @@ const parseInlineFormatting = (text: string): React.ReactNode => {
 
 // Simple URL regex to detect links
 const URL_REGEX = /https?:\/\/[^\s]+/g
+
+// Check if a line is a standalone URL
+const isStandaloneUrl = (line: string): boolean => {
+  const trimmed = line.trim()
+  return /^https?:\/\/[^\s]+$/.test(trimmed)
+}
 
 export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
   // Render a source item with link preview
@@ -132,6 +139,20 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
         // blank line: separate blocks
         flushList()
         flushParagraph()
+        continue
+      }
+
+      // Check if line is a standalone URL
+      if (isStandaloneUrl(line)) {
+        flushList()
+        flushParagraph()
+        blocks.push(
+          <ContentLinkPreview
+            key={`link-block-${blocks.length}`}
+            url={line.trim()}
+            fetchMetadata={fetchLinkMetadata}
+          />
+        )
         continue
       }
 
