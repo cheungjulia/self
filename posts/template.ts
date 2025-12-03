@@ -6,6 +6,8 @@
  * 2. Fill in title, location, content
  * 3. Add time (recommended) - if omitted, falls back to file mtime (unreliable on Vercel)
  * 4. Run `npm run dev` - id and date are auto-generated from the file path!
+ * 
+ * Follow-ups: Add follow-up thoughts later - they only show on individual post page
  */
 
 import type { RawPost } from "@/lib/blog-data"
@@ -18,5 +20,13 @@ export const post: RawPost = {
   // sources: [
   //   "https://example.com/article",
   //   "Some note or context",
+  // ],
+  // followups: [
+  //   {
+  //     date: "December 5, 2025",
+  //     time: "3:30 PM",  // optional
+  //     content: `follow-up thought or related link found later`,
+  //     // sources: ["https://example.com/related"],  // optional
+  //   },
   // ],
 }

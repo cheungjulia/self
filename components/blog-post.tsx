@@ -236,6 +236,89 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
           </ol>
         </div>
       )}
+
+      {/* Follow-ups only shown on individual post page */}
+      {isFullView && post.followups && post.followups.length > 0 && (
+        <div 
+          className="followups-section"
+          style={{
+            marginTop: "40px",
+            paddingTop: "32px",
+            borderTop: "1px dashed var(--border-color)",
+          }}
+        >
+          <p 
+            style={{
+              fontSize: "11px",
+              color: "var(--foreground-subtle)",
+              fontFamily: "'Courier New', monospace",
+              letterSpacing: "0.1em",
+              marginBottom: "24px",
+              textTransform: "uppercase",
+            }}
+          >
+            follow-up thoughts
+          </p>
+          
+          {post.followups.map((followup, index) => (
+            <div 
+              key={`followup-${index}`}
+              className="followup-item fade-up"
+              style={{
+                marginBottom: "32px",
+                paddingLeft: "16px",
+                borderLeft: "2px solid var(--border-color)",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "10px",
+                  color: "var(--foreground-subtle)",
+                  margin: "0 0 12px 0",
+                  fontFamily: "'Courier New', monospace",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                {followup.date}{followup.time && ` · ${followup.time}`}
+              </p>
+              
+              <div className="followup-content">
+                {renderContent(followup.content)}
+              </div>
+
+              {followup.sources && followup.sources.length > 0 && (
+                <div style={{ marginTop: "12px" }}>
+                  <ol 
+                    style={{ 
+                      margin: 0, 
+                      paddingLeft: "1.5em", 
+                      fontSize: "10px", 
+                      color: "var(--foreground-muted)", 
+                      fontFamily: "'Courier New', monospace", 
+                      listStyleType: "decimal", 
+                      listStylePosition: "outside",
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    {followup.sources.map((source, i) => (
+                      <li 
+                        key={`followup-${index}-source-${i}`} 
+                        style={{ 
+                          marginBottom: "4px", 
+                          wordBreak: "break-word", 
+                          paddingLeft: "0.3em" 
+                        }}
+                      >
+                        {renderSourceItem(source, i)}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </article>
   )
 }

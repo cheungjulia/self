@@ -1,3 +1,11 @@
+// Follow-up thought/comment on a post
+export interface FollowUp {
+  date: string       // e.g., "December 5, 2025"
+  time?: string      // e.g., "3:30 PM"
+  content: string
+  sources?: string[]
+}
+
 export interface BlogPost {
   id: string
   title: string
@@ -6,6 +14,7 @@ export interface BlogPost {
   location: string
   content: string
   sources?: string[]
+  followups?: FollowUp[]  // only shown on individual post page
 }
 
 // Raw post type - what you write in post files (id and date are auto-generated)
@@ -15,6 +24,7 @@ export interface RawPost {
   content: string
   time?: string
   sources?: string[]  // array of URLs or free text - URLs are auto-linked
+  followups?: FollowUp[]  // follow-up thoughts - only shown on individual post page
 }
 
 import { posts } from "@/posts"

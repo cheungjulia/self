@@ -21,5 +21,17 @@ sources: ["learning through putting robots into the wild: https://x.com/iliraliu
 "https://x.com/waymo/status/1991989888778973280?s=46&t=8ZG-I97lF81q1B3TVPOpgw",
 "https://www.youtube.com/watch?v=Qqyp00JPJZI",
 "'2024, the number of licensed ride-hailing drivers nationwide had reached 7.48 million — a figure roughly equal to the entire population of Hong Kong': https://www.beijingscroll.com/p/inside-chinas-748-million-ride-hailing",
-"'77% of drivers entered the ride-hailing sector after being unemployed':https://hr.asia/top-news/china/ride-hailing-drivers-are-second-highest-earners-among-chinese-blue-collar-workers/"]
+"'77% of drivers entered the ride-hailing sector after being unemployed':https://hr.asia/top-news/china/ride-hailing-drivers-are-second-highest-earners-among-chinese-blue-collar-workers/"],
+followups: [
+    {
+      date: "December 3, 2025",
+      time: "9:35 AM", 
+      content: `waymo released data covering nearly 100 million driverless miles -- 91% fewer serious-injury cases, 92% less pedestrians hit.`,
+      sources: ["https://x.com/klrhull/status/1995803951489581253", "https://www.nytimes.com/2025/12/02/opinion/self-driving-cars.html",
+        "https://x.com/peter_tulip/status/1995810181960105991",
+        "https://x.com/slotkinjr/status/1995864439405375903",
+        "https://waymo.com/open/"
+      ]
+    },
+  ],
 }
