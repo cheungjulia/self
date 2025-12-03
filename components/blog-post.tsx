@@ -299,9 +299,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
         <div 
           className="followups-section"
           style={{
-            marginTop: "40px",
-            paddingTop: "32px",
-            borderTop: "1px dashed var(--border-color)",
+            marginTop: "36px",
           }}
         >
           <p 
