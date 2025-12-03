@@ -2,6 +2,7 @@ import type { BlogPost } from "@/lib/blog-data"
 import { fetchLinkMetadata } from "@/lib/link-metadata"
 import { LinkPreview } from "./link-preview"
 import { ContentLinkPreview } from "./content-link-preview"
+import Link from "next/link"
 import React from "react"
 
 interface BlogPostProps {
@@ -168,22 +169,78 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
     return blocks
   }
 
+  const followupCount = post.followups?.length || 0
+
+  const titleContent = (
+    <span style={{ 
+      textDecoration: "none",
+      backgroundImage: "linear-gradient(var(--foreground), var(--foreground))",
+      backgroundSize: "0% 1px",
+      backgroundPosition: "0 100%",
+      backgroundRepeat: "no-repeat",
+      transition: "background-size 0.3s ease",
+    }}>
+      {post.title}
+    </span>
+  )
+
   return (
     <article style={{ marginBottom: "48px" }}>
-      <h2
-        className="post-title"
+      <div 
         style={{
-          fontFamily: "var(--font-noto-serif-hk), var(--font-playfair), Georgia, serif",
-          fontWeight: 400,
-          fontSize: "20px",
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          gap: "12px",
           margin: "0 0 12px 0",
-          letterSpacing: "0.02em",
-          color: "var(--foreground)",
-          lineHeight: 1.4,
         }}
       >
-        {post.title}
-      </h2>
+        <h2
+          className="post-title"
+          style={{
+            fontFamily: "var(--font-noto-serif-hk), var(--font-playfair), Georgia, serif",
+            fontWeight: 400,
+            fontSize: "20px",
+            margin: 0,
+            letterSpacing: "0.02em",
+            color: "var(--foreground)",
+            lineHeight: 1.4,
+            flex: 1,
+          }}
+        >
+          {isFullView ? (
+            post.title
+          ) : (
+            <Link 
+              href={`/post/${post.id}`}
+              className="post-title-link"
+              style={{
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              {titleContent}
+            </Link>
+          )}
+        </h2>
+
+        {followupCount > 0 && !isFullView && (
+          <span
+            style={{
+              fontSize: "9px",
+              fontFamily: "'Courier New', monospace",
+              color: "var(--foreground-subtle)",
+              padding: "3px 8px",
+              border: "1px dashed var(--border-color)",
+              whiteSpace: "nowrap",
+              letterSpacing: "0.05em",
+              marginTop: "4px",
+            }}
+          >
+            +{followupCount} follow-up{followupCount > 1 ? "s" : ""}
+          </span>
+        )}
+      </div>
 
       <p
         className="post-meta"

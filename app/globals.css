@@ -107,6 +107,10 @@
   line-height: 1.4;
 }
 
+.post-title-link:hover span {
+  background-size: 100% 1px;
+}
+
 .post-meta {
   font-family: "Courier New", monospace;
   font-size: 11px;
