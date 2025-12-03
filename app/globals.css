@@ -83,7 +83,7 @@
 
 /* Layout */
 .film-container {
-  padding: 40px 24px;
+  padding: 36px 12px;
   max-width: 640px;
   margin: 0 auto;
   animation: fadeIn 0.8s ease-out;
@@ -131,8 +131,8 @@
 /* Sources */
 .sources-section {
   margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px dashed var(--border-color);
+  padding-bottom: 36px;
+  border-bottom: 1px dashed var(--border-color);
 }
 
 .sources-label {
@@ -191,8 +191,7 @@
 
 /* Content Link Preview */
 .content-link-preview:hover {
-  border-color: var(--border-dark);
-  background: #f0f0f0;
+  border-color: var(--foreground-muted);
 }
 
 .content-link-preview:visited {

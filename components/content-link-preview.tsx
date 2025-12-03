@@ -29,9 +29,9 @@ export function ContentLinkPreview({ url, fetchMetadata }: ContentLinkPreviewPro
       style={{
         display: "block",
         margin: "1.2em 0",
-        padding: "16px 20px",
-        background: "var(--background-dark)",
-        border: "1px solid var(--border-color)",
+        padding: "12px 0 12px 16px",
+        background: "transparent",
+        borderLeft: "2px solid var(--border-dark)",
         textDecoration: "none",
         transition: "all 0.2s ease",
       }}

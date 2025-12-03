@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export function SiteHeader() {
   return (
-    <header style={{ marginBottom: "48px" }}>
+    <header style={{ marginBottom: "36px", marginTop: "12px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
         <div>
           <h1
@@ -57,7 +57,7 @@ export function SiteHeader() {
         </nav>
       </div>
       
-      <hr style={{ marginTop: "24px" }} />
+      <hr style={{ marginTop: "36px" }} />
     </header>
   )
 }

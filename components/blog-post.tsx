@@ -185,7 +185,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
   )
 
   return (
-    <article style={{ marginBottom: "48px" }}>
+    <article style={{ marginBottom: "36px" }}>
       <div 
         style={{
           display: "flex",
