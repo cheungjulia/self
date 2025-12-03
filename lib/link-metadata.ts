@@ -87,6 +87,84 @@ async function fetchTwitterMetadata(url: string): Promise<LinkMetadata> {
   }
 }
 
+// User agents to try - Googlebot often allowed for SEO, then browser fallback
+const USER_AGENTS = [
+  "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+]
+
+// Check if metadata looks like a generic/blocked response
+function isGenericMetadata(metadata: LinkMetadata, domain: string): boolean {
+  if (!metadata.title) return true
+  const title = metadata.title.toLowerCase()
+  // Detect generic paywall/login/captcha page titles
+  const genericPatterns = [
+    /^subscribe/i,
+    /^sign in/i,
+    /^log in/i,
+    /^access denied/i,
+    /^403/i,
+    /^error/i,
+    /^please enable/i,
+  ]
+  // Also check if title is just the domain name (common bot-blocked response)
+  const isDomainOnly = title === domain.toLowerCase() || 
+    title === domain.replace(/\.com$|\.org$|\.net$/i, "").toLowerCase()
+  return genericPatterns.some(pattern => pattern.test(title)) || isDomainOnly
+}
+
+// Extract readable title from URL slug (fallback for bot-protected sites)
+function extractTitleFromUrl(url: string): string | null {
+  try {
+    const parsedUrl = new URL(url)
+    const pathname = parsedUrl.pathname
+    
+    // Get the last meaningful path segment (skip dates, IDs, etc.)
+    const segments = pathname.split("/").filter(s => s && s.length > 0)
+    
+    // Find the segment most likely to be the article title
+    // Usually it's the last segment, or second-to-last if last is an ID
+    let titleSegment: string | null = null
+    
+    for (let i = segments.length - 1; i >= 0; i--) {
+      const seg = segments[i]
+      // Skip numeric segments (dates, IDs), file extensions, short segments
+      if (/^\d+$/.test(seg)) continue
+      if (/^\d{4}-\d{2}-\d{2}/.test(seg)) continue
+      if (seg.length < 5) continue
+      // Remove file extension
+      const cleaned = seg.replace(/\.(html?|php|aspx?)$/i, "")
+      if (cleaned.length < 5) continue
+      titleSegment = cleaned
+      break
+    }
+    
+    if (!titleSegment) return null
+    
+    // Convert slug to readable title: "some-article-title" -> "Some Article Title"
+    const words = titleSegment
+      .replace(/[-_]/g, " ")
+      .split(" ")
+      .filter(w => w.length > 0)
+      .map(word => {
+        // Don't capitalize short words unless they're first
+        const lower = word.toLowerCase()
+        if (["a", "an", "the", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by"].includes(lower)) {
+          return lower
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      })
+    
+    if (words.length === 0) return null
+    // Always capitalize first word
+    words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1)
+    
+    return words.join(" ")
+  } catch {
+    return null
+  }
+}
+
 export async function fetchLinkMetadata(url: string): Promise<LinkMetadata> {
   const parsedUrl = new URL(url)
   const domain = parsedUrl.hostname.replace(/^www\./, "")
@@ -96,22 +174,34 @@ export async function fetchLinkMetadata(url: string): Promise<LinkMetadata> {
     return fetchTwitterMetadata(url)
   }
   
-  try {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; LinkPreview/1.0)",
-      },
-      next: { revalidate: 86400 }, // Cache for 24 hours
-    })
+  // Try each user agent until we get good metadata
+  for (const userAgent of USER_AGENTS) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "User-Agent": userAgent,
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.5",
+        },
+        next: { revalidate: 86400 }, // Cache for 24 hours
+      })
 
-    if (!response.ok) {
-      return { url, title: null, description: null, domain }
+      if (!response.ok) continue
+
+      const html = await response.text()
+      const metadata = extractMetadata(html, url)
+      
+      // If we got good metadata, return it
+      if (!isGenericMetadata(metadata, domain)) {
+        return metadata
+      }
+    } catch {
+      continue
     }
-
-    const html = await response.text()
-    return extractMetadata(html, url)
-  } catch {
-    return { url, title: null, description: null, domain }
   }
+  
+  // Fallback: extract title from URL slug (works for paywalled/bot-protected sites)
+  const urlTitle = extractTitleFromUrl(url)
+  return { url, title: urlTitle, description: null, domain }
 }
 
