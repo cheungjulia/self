@@ -3,39 +3,39 @@ import { fetchLinkMetadata } from "@/lib/link-metadata"
 import { LinkPreview } from "./link-preview"
 import { ContentLinkPreview } from "./content-link-preview"
 import Link from "next/link"
+import Image from "next/image"
 import React from "react"
+import parse, { Element, type HTMLReactParserOptions } from "html-react-parser"
 
 interface BlogPostProps {
   post: BlogPost
   isFullView?: boolean
 }
 
-// Parse inline <b> and <i> tags into React elements
+// Parse inline HTML tags into React elements using html-react-parser
 const parseInlineFormatting = (text: string): React.ReactNode => {
-  const regex = /<(b|i)>(.*?)<\/\1>/g
-  const parts: React.ReactNode[] = []
-  let lastIndex = 0
-  let match
-
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(text.slice(lastIndex, match.index))
-    }
-    const [, tag, content] = match
-    const key = `${tag}-${match.index}`
-    parts.push(
-      tag === "b" 
-        ? <strong key={key}>{parseInlineFormatting(content)}</strong>
-        : <em key={key}>{parseInlineFormatting(content)}</em>
-    )
-    lastIndex = regex.lastIndex
+  const options: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode instanceof Element && domNode.name === "img") {
+        const { src, alt, width, height } = domNode.attribs
+        return (
+          <Image
+            src={src}
+            alt={alt || ""}
+            width={width ? parseInt(width) : 600}
+            height={height ? parseInt(height) : 400}
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+              margin: "1em 0",
+              borderRadius: "4px",
+            }}
+          />
+        )
+      }
+    },
   }
-
-  if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex))
-  }
-
-  return parts.length === 1 ? parts[0] : parts
+  return parse(text, options)
 }
 
 // Simple URL regex to detect links
