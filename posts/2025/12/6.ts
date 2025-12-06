@@ -5,7 +5,7 @@ export const post: RawPost = {
   location: "early morning, cold room",
   content: `
   when talking to LLMs, i no longer bother to write in full sentences, nor do i even attempt to express myself artically. i dont even fix my typos. even before i get stuck it spoonfeeds me suggestions on the next possible word. more and more, reading non-LLM articles feel exhausting and my attention careens. 
-    <img src="/2025-12-4.png" alt="words don't come easy" />
+    <img src="/2025-12-6.png" alt="words don't come easy" />
 
     but i can tell. i cant tell if an article is necessarily LLM-generated, but i can tell when it's not. 
 
