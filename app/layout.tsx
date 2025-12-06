@@ -22,7 +22,21 @@ const notoSerifHK = Noto_Serif_HK({
 export const metadata: Metadata = {
   title: "thoughts.txt",
   description: "things and thoughts and artefacts",
-  generator: 'v0.app'
+  generator: 'v0.app',
+  openGraph: {
+    title: "thoughts.txt [慧慧]",
+    description: "i blunder words and overthink",
+    url: "https://creaturewai.net",
+    siteName: "thoughts.txt",
+    images: [
+      {
+        url: "https://creaturewai.net/teahouse_hk.jpg",
+        width: 1500,
+        height: 1000,
+      },
+    ],
+    type: "website",
+  },
 }
 
 export default function RootLayout({
