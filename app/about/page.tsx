@@ -10,6 +10,7 @@ export default function AboutPage() {
         alt="Hong Kong teahouse"
         width={640}
         height={427}
+        priority
         style={{
           width: "100%",
           height: "auto",

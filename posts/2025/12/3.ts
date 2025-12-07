@@ -28,4 +28,30 @@ export const post: RawPost = {
     "memory from then to now: https://huggingface.co/blog/Kseniase/memory",
     "nested learning: https://research.google/blog/introducing-nested-learning-a-new-ml-paradigm-for-continual-learning/"
   ],
+  followups: [
+    {
+      date: "December 8, 2025",
+      content: `
+      From Google's Nested Learning paper
+      https://abehrouz.github.io/files/NL.pdf
+
+      <i>Limitations of LLM/transformer models as how they represent the brain:</i>
+- <b>Lack of multi-timescale processing:</b> Brainwaves are the results of the brain coordinating its computations in different timescales and frequency of updates. In deep learning models, however, the weights of the architectures are fixed at test time and also it is common in pre-training to use the same update rate for all the blocks/layers in the model. Later, in Section 6, however, we show that in-context learning provides an extreme case of this design and in fact, Transformer architectures are based on two extreme frequencies of update: i.e., ∞ and 0 for attention and MLP blocks, respectively
+- <b>Brain's neuroplasticity:</b> can change itself in response to new memories, knowledge, and even damage 
+- <b>Human brain not as an isolated system of specific areas, but rather distributed:</b> The modern deep learning architectures in recent years, however, at least on the surface, seem to be heterogeneous and are based on a combination of a subset of self-attention variants (Vaswani et al. 2017), modern recurrent neural networks (Katharopoulos et al. 2020; Schlag et al. 2021; Behrouz et al. 2025c; Peng et al. 2025b), canon layers (Allen-Zhu 2025), global convolutions (Hasani et al. 2023; Poli et al. 2023), and MLP blocks (Shazeer 2020).
+
+<i>Paradigm shift: unification of architecture and optimisation using Nested Learning</i>
+A model is viewed as a hierarchy of interconnected learning modules, each with its own:
+- Typical deep learning built on a simple hierarchy, you have the model, you have an optimiser (the training rule), you have data -- treating them as separate entities
+- Nested learning says that the division is artificial, model and optimiser are both learning systems, just operating at different levels of abstraction
+- Each has its own internal flow of information, or what the authors call “context flow.” When you zoom out, training isn’t one process, it’s a stack of interconnected optimization problems nested inside one another, each updating at a different rate (update frequency how often it adapts)
+- These modules form nested or parallel optimization loops, enabling multi-level learning within a single system.
+      `,
+      sources: [
+        "https://evoailabs.medium.com/nested-learning-new-research-from-google-6ae0ae38656f",
+        "https://www.reddit.com/r/singularity/comments/1or265r/google_introducing_nested_learning_a_new_ml/",
+        "https://medium.com/data-science-in-your-pocket/what-is-google-nested-learning-34385df5c40b"
+      ],
+    },
+  ],
 }
