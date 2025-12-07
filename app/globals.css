@@ -83,7 +83,7 @@
 
 /* Layout */
 .film-container {
-  padding: 36px 12px;
+  padding: 36px 18px;
   max-width: 640px;
   margin: 0 auto;
   animation: fadeIn 0.8s ease-out;

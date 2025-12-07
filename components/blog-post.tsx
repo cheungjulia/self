@@ -269,12 +269,12 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
           <ol 
             style={{ 
               margin: 0, 
-              paddingLeft: "1.5em", 
+              paddingLeft: 0, 
               fontSize: "11px", 
               color: "var(--foreground-muted)", 
               fontFamily: "'Courier New', monospace", 
               listStyleType: "decimal", 
-              listStylePosition: "outside",
+              listStylePosition: "inside",
               lineHeight: 1.8,
             }}
           >
