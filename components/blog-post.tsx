@@ -273,8 +273,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
               fontSize: "11px", 
               color: "var(--foreground-muted)", 
               fontFamily: "'Courier New', monospace", 
-              listStyleType: "decimal", 
-              listStylePosition: "inside",
+              listStyle: "none",
               lineHeight: 1.8,
             }}
           >
@@ -283,11 +282,14 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
                 key={`source-${i}`} 
                 style={{ 
                   marginBottom: "6px", 
-                  wordBreak: "break-word", 
-                  paddingLeft: "0.3em" 
+                  wordBreak: "break-word",
+                  display: "flex",
+                  alignItems: "start",
+                  gap: "0.5em",
                 }}
               >
-                {renderSourceItem(source, i)}
+                <span style={{ flexShrink: 0 }}>{i + 1}.</span>
+                <span style={{ minWidth: 0 }}>{renderSourceItem(source, i)}</span>
               </li>
             ))}
           </ol>

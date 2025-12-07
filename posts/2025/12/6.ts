@@ -3,6 +3,7 @@ import type { RawPost } from "@/lib/blog-data"
 export const post: RawPost = {
   title: "words don't come easy to me -- especially in the LLM era",
   location: "early morning, cold room",
+  time: "8:37 AM",
   content: `
   when talking to LLMs, i no longer bother to write in full sentences, nor do i even attempt to express myself artically. i dont even fix my typos. even before i get stuck it spoonfeeds me suggestions on the next possible word. more and more, reading non-LLM articles feel exhausting and my attention careens. 
     <img src="/2025-12-6.png" alt="words don't come easy" />
