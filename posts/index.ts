@@ -3,6 +3,7 @@
 
 import type { BlogPost } from "@/lib/blog-data"
 
+import { post as post20251207 } from "./2025/12/7"
 import { post as post20251206 } from "./2025/12/6"
 import { post as post20251203 } from "./2025/12/3"
 import { post as post20251202 } from "./2025/12/2"
@@ -13,6 +14,7 @@ import { post as post20251124 } from "./2025/11/24"
 import { post as post20251123 } from "./2025/11/23"
 
 export const posts: BlogPost[] = [
+  { id: "2025-12-07", date: "December 7, 2025", time: "6:15 PM", ...post20251207 },
   { id: "2025-12-06", date: "December 6, 2025", time: "8:37 AM", ...post20251206 },
   { id: "2025-12-03", date: "December 3, 2025", time: "9:09 AM", ...post20251203 },
   { id: "2025-12-02", date: "December 2, 2025", time: "10:43 PM", ...post20251202 },

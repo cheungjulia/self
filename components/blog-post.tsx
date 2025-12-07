@@ -281,10 +281,10 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
               <li 
                 key={`source-${i}`} 
                 style={{ 
-                  marginBottom: "6px", 
+                  marginBottom: "4px", 
                   wordBreak: "break-word",
                   display: "flex",
-                  alignItems: "start",
+                  alignItems: "baseline",
                   gap: "0.5em",
                 }}
               >

@@ -28,10 +28,10 @@ export function ContentLinkPreview({ url, fetchMetadata }: ContentLinkPreviewPro
       className="content-link-preview"
       style={{
         display: "block",
-        margin: "1.2em 0",
+        margin: "1em 0",
         padding: "12px 0 12px 16px",
         background: "transparent",
-        borderLeft: "2px solid var(--border-dark)",
+        borderLeft: "2px solid var(--border-color)",
         textDecoration: "none",
         transition: "all 0.2s ease",
       }}
@@ -57,7 +57,7 @@ export function ContentLinkPreview({ url, fetchMetadata }: ContentLinkPreviewPro
               style={{
                 fontFamily: "var(--font-noto-serif-hk), var(--font-playfair), Georgia, serif",
                 fontSize: "14px",
-                color: "var(--foreground)",
+                color: "var(--foreground-muted)",
                 marginBottom: metadata?.description ? "8px" : "0",
                 lineHeight: 1.4,
               }}
