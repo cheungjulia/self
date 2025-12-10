@@ -9,8 +9,18 @@
  */
 
 export interface WhatsAppMessage {
-  to: string // Phone number in E.164 format (without +)
+  to: string // Phone number in E.164 format (with or without +)
   text: string
+}
+
+export interface WhatsAppTemplateMessage {
+  to: string
+  templateName: string
+  languageCode?: string
+  components?: Array<{
+    type: 'header' | 'body'
+    parameters: Array<{ type: 'text'; text: string }>
+  }>
 }
 
 export interface SendResult {
@@ -90,8 +100,68 @@ class WhatsAppService {
   }
 
   /**
-   * Send messages to multiple recipients
-   * Returns summary of results
+   * Send a template message to a single recipient
+   * Templates can be sent anytime (no 24h window required)
+   */
+  async sendTemplateMessage(message: WhatsAppTemplateMessage): Promise<SendResult> {
+    try {
+      const { phoneNumberId, accessToken } = this.getCredentials()
+      const toNumber = message.to.replace(/^\+/, '')
+
+      const payload: Record<string, unknown> = {
+        messaging_product: 'whatsapp',
+        recipient_type: 'individual',
+        to: toNumber,
+        type: 'template',
+        template: {
+          name: message.templateName,
+          language: { code: message.languageCode || 'en_US' },
+        },
+      }
+
+      // Add components if provided (for templates with variables)
+      if (message.components && message.components.length > 0) {
+        (payload.template as Record<string, unknown>).components = message.components
+      }
+
+      const response = await fetch(
+        `https://graph.facebook.com/v21.0/${phoneNumberId}/messages`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        console.error('WhatsApp API error:', data)
+        return {
+          success: false,
+          error: data.error?.message || 'Failed to send template message',
+        }
+      }
+
+      return {
+        success: true,
+        messageId: data.messages?.[0]?.id,
+      }
+    } catch (error) {
+      console.error('WhatsApp send error:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      }
+    }
+  }
+
+  /**
+   * Send text messages to multiple recipients
+   * Note: Only works within 24h of user messaging you first
    */
   async sendBulk(
     phones: string[],
@@ -100,7 +170,33 @@ class WhatsAppService {
     const results = await Promise.allSettled(
       phones.map(phone => this.sendMessage({ to: phone, text }))
     )
+    return this.summarizeResults(results)
+  }
 
+  /**
+   * Send template messages to multiple recipients
+   * Works anytime (no 24h window required)
+   */
+  async sendBulkTemplate(
+    phones: string[],
+    templateName: string,
+    languageCode?: string
+  ): Promise<{ sent: number; failed: number; errors: string[] }> {
+    const results = await Promise.allSettled(
+      phones.map(phone => 
+        this.sendTemplateMessage({ 
+          to: phone, 
+          templateName,
+          languageCode,
+        })
+      )
+    )
+    return this.summarizeResults(results)
+  }
+
+  private summarizeResults(
+    results: PromiseSettledResult<SendResult>[]
+  ): { sent: number; failed: number; errors: string[] } {
     const errors: string[] = []
     let sent = 0
     let failed = 0
@@ -118,7 +214,7 @@ class WhatsAppService {
       }
     }
 
-    return { sent, failed, errors: [...new Set(errors)] } // Dedupe errors
+    return { sent, failed, errors: [...new Set(errors)] }
   }
 
   /**

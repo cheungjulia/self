@@ -96,6 +96,7 @@ async function main() {
     }
 
     const result = await response.json()
+    console.log(result)
 
     if (!response.ok) {
       console.error('❌ Failed:', result.error || 'Unknown error')
@@ -106,6 +107,7 @@ async function main() {
     console.log(`   Sent: ${result.sent}`)
     console.log(`   Failed: ${result.failed}`)
     console.log(`   Total subscribers: ${result.total}`)
+    console.log(`   Phones: ${result.phones.join(', ')}`)
 
     if (result.errors?.length > 0) {
       console.log('')

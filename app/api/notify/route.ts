@@ -7,6 +7,8 @@ const notifySchema = z.object({
   postId: z.string().min(1),
   title: z.string().min(1),
   url: z.string().url().optional(), // Optional - will construct from postId if not provided
+  useTemplate: z.boolean().optional(), // Use template message instead of text (default: true)
+  templateName: z.string().optional(), // Template name (default: hello_world)
 })
 
 /**
@@ -49,7 +51,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { postId, title, url } = parsed.data
+    const { postId, title, url, useTemplate = true, templateName = 'hello_world' } = parsed.data
 
     // Construct URL if not provided
     const siteUrl = process.env.SITE_URL || 'https://creaturewai.net'
@@ -67,10 +69,17 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // Format message and send
-    const message = whatsappService.formatNewPostMessage({ title, url: postUrl })
     const phones = subscribers.map(s => s.phone)
-    const result = await whatsappService.sendBulk(phones, message)
+    let result: { sent: number; failed: number; errors: string[] }
+
+    if (useTemplate) {
+      // Use template message (works anytime, no 24h window)
+      result = await whatsappService.sendBulkTemplate(phones, templateName)
+    } else {
+      // Use text message (only works within 24h of user messaging first)
+      const message = whatsappService.formatNewPostMessage({ title, url: postUrl })
+      result = await whatsappService.sendBulk(phones, message)
+    }
 
     console.log(`Notified subscribers: ${result.sent} sent, ${result.failed} failed`)
 
@@ -80,6 +89,7 @@ export async function POST(req: NextRequest) {
       failed: result.failed,
       total: subscribers.length,
       errors: result.errors.length > 0 ? result.errors : undefined,
+      phones: phones,
     })
   } catch (error) {
     console.error('Notify error:', error)
