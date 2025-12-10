@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { SubscribeDialog } from "./subscribe-dialog"
 
 export function SiteHeader() {
   return (
@@ -49,15 +50,29 @@ export function SiteHeader() {
             lineHeight: 1.6,
           }}
         >
-          <Link href="/" className="nav-link">home</Link>
-          <br />
           <Link href="/archive" className="nav-link">archive</Link>
           <br />
           <Link href="/about" className="nav-link">about</Link>
+          <br />
+          <SubscribeDialog 
+            trigger={
+              <button className="nav-link" style={subscribeButtonStyles}>
+                subscribe
+              </button>
+            } 
+          />
         </nav>
       </div>
       
       <hr style={{ marginTop: "36px" }} />
     </header>
   )
+}
+
+const subscribeButtonStyles: React.CSSProperties = {
+  background: "none",
+  border: "none",
+  padding: 0,
+  font: "inherit",
+  cursor: "pointer",
 }
