@@ -7,7 +7,8 @@
     "build": "npm run generate-posts && next build",
     "dev": "npm run generate-posts && next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "notify": "node scripts/notify-subscribers.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
