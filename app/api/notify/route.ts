@@ -6,9 +6,6 @@ import { z } from 'zod'
 const notifySchema = z.object({
   postId: z.string().min(1),
   title: z.string().min(1),
-  url: z.string().url().optional(), // Optional - will construct from postId if not provided
-  useTemplate: z.boolean().optional(), // Use template message instead of text (default: true)
-  templateName: z.string().optional(), // Template name (default: hello_world)
 })
 
 /**
@@ -17,33 +14,27 @@ const notifySchema = z.object({
  * Sends a WhatsApp notification to all subscribers about a new post.
  * Protected by NOTIFY_SECRET bearer token.
  * 
- * Body: { postId: string, title: string, url?: string }
+ * Body: { postId: string, title: string }
+ * 
+ * Requires a WhatsApp template called "new_post" with {{1}} for the title.
  */
 export async function POST(req: NextRequest) {
-  // Auth check
   const authHeader = req.headers.get('authorization')
   const expectedToken = process.env.NOTIFY_SECRET
 
   if (!expectedToken) {
     console.error('NOTIFY_SECRET not configured')
-    return NextResponse.json(
-      { error: 'Server misconfigured' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
   }
 
   if (authHeader !== `Bearer ${expectedToken}`) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    )
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   try {
     const body = await req.json()
-
-    // Validate input
     const parsed = notifySchema.safeParse(body)
+    
     if (!parsed.success) {
       return NextResponse.json(
         { error: parsed.error.errors[0]?.message || 'Invalid input' },
@@ -51,13 +42,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { postId, title, url, useTemplate = true, templateName = 'hello_world' } = parsed.data
-
-    // Construct URL if not provided
-    const siteUrl = process.env.SITE_URL || 'https://creaturewai.net'
-    const postUrl = url || `${siteUrl}/post/${postId}`
-
-    // Get all subscribers
+    const { title } = parsed.data
     const subscribers = await subscriberService.getAll()
 
     if (subscribers.length === 0) {
@@ -70,16 +55,7 @@ export async function POST(req: NextRequest) {
     }
 
     const phones = subscribers.map(s => s.phone)
-    let result: { sent: number; failed: number; errors: string[] }
-
-    if (useTemplate) {
-      // Use template message (works anytime, no 24h window)
-      result = await whatsappService.sendBulkTemplate(phones, templateName)
-    } else {
-      // Use text message (only works within 24h of user messaging first)
-      const message = whatsappService.formatNewPostMessage({ title, url: postUrl })
-      result = await whatsappService.sendBulk(phones, message)
-    }
+    const result = await whatsappService.notifyNewPost(phones, title)
 
     console.log(`Notified subscribers: ${result.sent} sent, ${result.failed} failed`)
 
@@ -88,15 +64,11 @@ export async function POST(req: NextRequest) {
       sent: result.sent,
       failed: result.failed,
       total: subscribers.length,
+      phones,
       errors: result.errors.length > 0 ? result.errors : undefined,
-      phones: phones,
     })
   } catch (error) {
     console.error('Notify error:', error)
-    return NextResponse.json(
-      { error: 'Failed to send notifications' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to send notifications' }, { status: 500 })
   }
 }
-
