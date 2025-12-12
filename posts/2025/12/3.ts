@@ -1,15 +1,3 @@
-/**
- * Template for new blog posts
- * 
- * To create a new post:
- * 1. Copy this file to posts/YYYY/MM/DD.ts (e.g., posts/2025/11/28.ts)
- * 2. Fill in title, location, content
- * 3. Add time (recommended) - if omitted, falls back to file mtime (unreliable on Vercel)
- * 4. Run `npm run dev` - id and date are auto-generated from the file path!
- * 
- * Follow-ups: Add follow-up thoughts later - they only show on individual post page
- */
-
 import type { RawPost } from "@/lib/blog-data"
 
 export const post: RawPost = {
@@ -53,5 +41,13 @@ A model is viewed as a hierarchy of interconnected learning modules, each with 
         "https://medium.com/data-science-in-your-pocket/what-is-google-nested-learning-34385df5c40b"
       ],
     },
+    {
+      date: "December 12, 2025",
+      content: `
+      continual learning in token space??
+      https://www.letta.com/blog/continual-learning
+  
+      `,
+    }
   ],
 }

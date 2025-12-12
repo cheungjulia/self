@@ -2,6 +2,7 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { BlogPostComponent } from "@/components/blog-post"
 import { getPostById, getAllPosts } from "@/lib/blog-data"
+import { extractUrlsFromPost, prefetchMetadataForUrls } from "@/lib/link-metadata"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -23,6 +24,15 @@ export default async function PostPage({
   if (!post) {
     notFound()
   }
+
+  // Pre-fetch link metadata at build time for this post (including followups)
+  const followupSources = post.followups?.flatMap(f => f.sources ?? []) ?? []
+  const followupContent = post.followups?.map(f => f.content).join('\n') ?? ''
+  const allUrls = extractUrlsFromPost(
+    post.content + '\n' + followupContent, 
+    [...(post.sources ?? []), ...followupSources]
+  )
+  const metadataMap = await prefetchMetadataForUrls(allUrls)
 
   return (
     <main>
@@ -49,7 +59,7 @@ export default async function PostPage({
         </Link>
       </p>
 
-      <BlogPostComponent post={post} isFullView />
+      <BlogPostComponent post={post} isFullView metadataMap={metadataMap} />
 
       <SiteFooter />
     </main>

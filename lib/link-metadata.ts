@@ -1,4 +1,9 @@
-"use server"
+/**
+ * Link metadata utilities for fetching and parsing Open Graph data
+ * 
+ * These functions run on the server during SSR/SSG build time.
+ * No "use server" directive needed since they're called from Server Components.
+ */
 
 export interface LinkMetadata {
   url: string
@@ -163,6 +168,47 @@ function extractTitleFromUrl(url: string): string | null {
   } catch {
     return null
   }
+}
+
+// Extract all URLs from a post's content and sources
+export function extractUrlsFromPost(content: string, sources?: string[]): string[] {
+  const urls: Set<string> = new Set()
+  const urlRegex = /https?:\/\/[^\s]+/g
+  
+  // Extract from content
+  let match
+  while ((match = urlRegex.exec(content)) !== null) {
+    urls.add(match[0])
+  }
+  
+  // Extract from sources
+  if (sources) {
+    for (const source of sources) {
+      urlRegex.lastIndex = 0
+      while ((match = urlRegex.exec(source)) !== null) {
+        urls.add(match[0])
+      }
+    }
+  }
+  
+  return Array.from(urls)
+}
+
+// Pre-fetch metadata for multiple URLs in parallel
+// Returns a map of URL -> LinkMetadata for efficient lookup
+export async function prefetchMetadataForUrls(urls: string[]): Promise<Map<string, LinkMetadata>> {
+  const results = await Promise.allSettled(
+    urls.map(async (url) => ({ url, metadata: await fetchLinkMetadata(url) }))
+  )
+  
+  const metadataMap = new Map<string, LinkMetadata>()
+  for (const result of results) {
+    if (result.status === 'fulfilled') {
+      metadataMap.set(result.value.url, result.value.metadata)
+    }
+  }
+  
+  return metadataMap
 }
 
 export async function fetchLinkMetadata(url: string): Promise<LinkMetadata> {

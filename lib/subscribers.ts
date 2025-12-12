@@ -39,8 +39,12 @@ export class SubscriberService {
     }
 
     // Store subscriber data as hash and add to list (atomic pipeline)
+    // Note: metadata needs to be JSON stringified for Redis hash storage
     const pipeline = redis.pipeline()
-    pipeline.hset(key, subscriber as unknown as Record<string, unknown>)
+    pipeline.hset(key, {
+      ...subscriber,
+      metadata: JSON.stringify(subscriber.metadata),
+    })
     pipeline.sadd(REDIS_KEYS.subscriberList, phone)
     await pipeline.exec()
 
@@ -128,12 +132,24 @@ export class SubscriberService {
       return null
     }
 
+    // Parse metadata from JSON string (Redis stores nested objects as strings)
+    let metadata: SubscriberMetadata = {}
+    if (data.metadata) {
+      try {
+        metadata = typeof data.metadata === 'string' 
+          ? JSON.parse(data.metadata) 
+          : (data.metadata as SubscriberMetadata)
+      } catch {
+        metadata = {}
+      }
+    }
+
     return {
       id: String(data.id),
       phone: String(data.phone),
       name: String(data.name),
       subscribedAt: String(data.subscribedAt),
-      metadata: (typeof data.metadata === 'object' ? data.metadata : {}) as SubscriberMetadata,
+      metadata,
     }
   }
 }

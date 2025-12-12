@@ -6,20 +6,28 @@ import type { LinkMetadata } from "@/lib/link-metadata"
 interface LinkPreviewProps {
   url: string
   prefixText?: string // Text before the URL (e.g., quotes from the source)
-  fetchMetadata: (url: string) => Promise<LinkMetadata>
+  prefetchedMetadata?: LinkMetadata // Pre-fetched metadata from SSR (preferred)
+  fetchMetadata?: (url: string) => Promise<LinkMetadata> // Fallback for client-side fetch
 }
 
-export function LinkPreview({ url, prefixText, fetchMetadata }: LinkPreviewProps) {
-  const [metadata, setMetadata] = useState<LinkMetadata | null>(null)
-  const [loading, setLoading] = useState(true)
+export function LinkPreview({ url, prefixText, prefetchedMetadata, fetchMetadata }: LinkPreviewProps) {
+  const [metadata, setMetadata] = useState<LinkMetadata | null>(prefetchedMetadata ?? null)
+  const [loading, setLoading] = useState(!prefetchedMetadata)
 
+  // Only fetch on client if no pre-fetched metadata was provided
   useEffect(() => {
+    if (prefetchedMetadata || !fetchMetadata) return
+    
     fetchMetadata(url)
       .then(setMetadata)
       .finally(() => setLoading(false))
-  }, [url, fetchMetadata])
+  }, [url, fetchMetadata, prefetchedMetadata])
 
-  const domain = metadata?.domain ?? new URL(url).hostname.replace(/^www\./, "")
+  // Safely extract domain with fallback for malformed URLs
+  const domain = metadata?.domain ?? (() => {
+    try { return new URL(url).hostname.replace(/^www\./, "") }
+    catch { return url }
+  })()
 
   return (
     <span>

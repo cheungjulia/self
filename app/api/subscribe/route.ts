@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { subscriberService } from '@/lib/subscribers'
+import { getRedis } from '@/lib/redis'
+import { Ratelimit } from '@upstash/ratelimit'
 import { z } from 'zod'
 
 const subscribeSchema = z.object({
@@ -13,8 +15,27 @@ const subscribeSchema = z.object({
   }).optional(),
 })
 
+// Rate limiter: 5 requests per hour per IP to prevent spam
+const ratelimit = new Ratelimit({
+  redis: getRedis(),
+  limiter: Ratelimit.slidingWindow(5, '1 h'),
+  analytics: true,
+  prefix: 'ratelimit:subscribe',
+})
+
 export async function POST(req: NextRequest) {
   try {
+    // Rate limiting by IP
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'anonymous'
+    const { success, remaining } = await ratelimit.limit(ip)
+    
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'X-RateLimit-Remaining': String(remaining) } }
+      )
+    }
+
     const body = await req.json()
     
     // Validate input

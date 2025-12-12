@@ -1,19 +1,34 @@
 import type { BlogPost } from "@/lib/blog-data"
-import { fetchLinkMetadata } from "@/lib/link-metadata"
+import type { LinkMetadata } from "@/lib/link-metadata"
+// Note: fetchLinkMetadata import removed - metadata is now pre-fetched at build time
 import { LinkPreview } from "./link-preview"
 import { ContentLinkPreview } from "./content-link-preview"
 import Link from "next/link"
 import Image from "next/image"
 import React from "react"
 import parse, { Element, type HTMLReactParserOptions } from "html-react-parser"
+import DOMPurify from "isomorphic-dompurify"
 
 interface BlogPostProps {
   post: BlogPost
   isFullView?: boolean
+  // Pre-fetched metadata map (URL -> LinkMetadata) for SSR performance
+  metadataMap?: Map<string, LinkMetadata>
 }
 
+// Allowed HTML tags for sanitization (prevents XSS)
+const ALLOWED_TAGS = ['b', 'i', 'em', 'strong', 'u', 'br', 'img', 'a', 'span']
+const ALLOWED_ATTR = ['href', 'src', 'alt', 'width', 'height', 'target', 'rel', 'class']
+
 // Parse inline HTML tags into React elements using html-react-parser
+// Sanitized with DOMPurify to prevent XSS attacks
 const parseInlineFormatting = (text: string): React.ReactNode => {
+  // Sanitize HTML to only allow safe tags
+  const sanitized = DOMPurify.sanitize(text, {
+    ALLOWED_TAGS,
+    ALLOWED_ATTR,
+  })
+
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.name === "img") {
@@ -35,7 +50,7 @@ const parseInlineFormatting = (text: string): React.ReactNode => {
       }
     },
   }
-  return parse(text, options)
+  return parse(sanitized, options)
 }
 
 // Simple URL regex to detect links
@@ -47,7 +62,7 @@ const isStandaloneUrl = (line: string): boolean => {
   return /^https?:\/\/[^\s]+$/.test(trimmed)
 }
 
-export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
+export function BlogPostComponent({ post, isFullView = false, metadataMap }: BlogPostProps) {
   // Render a source item with link preview
   const renderSourceItem = (source: string, index: number) => {
     URL_REGEX.lastIndex = 0
@@ -66,7 +81,7 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
         key={`link-${index}`}
         url={url}
         prefixText={prefixText}
-        fetchMetadata={fetchLinkMetadata}
+        prefetchedMetadata={metadataMap?.get(url)}
       />
     )
   }
@@ -147,11 +162,12 @@ export function BlogPostComponent({ post, isFullView = false }: BlogPostProps) {
       if (isStandaloneUrl(line)) {
         flushList()
         flushParagraph()
+        const trimmedUrl = line.trim()
         blocks.push(
           <ContentLinkPreview
             key={`link-block-${blocks.length}`}
-            url={line.trim()}
-            fetchMetadata={fetchLinkMetadata}
+            url={trimmedUrl}
+            prefetchedMetadata={metadataMap?.get(trimmedUrl)}
           />
         )
         continue

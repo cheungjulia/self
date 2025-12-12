@@ -5,20 +5,28 @@ import type { LinkMetadata } from "@/lib/link-metadata"
 
 interface ContentLinkPreviewProps {
   url: string
-  fetchMetadata: (url: string) => Promise<LinkMetadata>
+  prefetchedMetadata?: LinkMetadata // Pre-fetched metadata from SSR (preferred)
+  fetchMetadata?: (url: string) => Promise<LinkMetadata> // Fallback for client-side fetch
 }
 
-export function ContentLinkPreview({ url, fetchMetadata }: ContentLinkPreviewProps) {
-  const [metadata, setMetadata] = useState<LinkMetadata | null>(null)
-  const [loading, setLoading] = useState(true)
+export function ContentLinkPreview({ url, prefetchedMetadata, fetchMetadata }: ContentLinkPreviewProps) {
+  const [metadata, setMetadata] = useState<LinkMetadata | null>(prefetchedMetadata ?? null)
+  const [loading, setLoading] = useState(!prefetchedMetadata)
 
+  // Only fetch on client if no pre-fetched metadata was provided
   useEffect(() => {
+    if (prefetchedMetadata || !fetchMetadata) return
+    
     fetchMetadata(url)
       .then(setMetadata)
       .finally(() => setLoading(false))
-  }, [url, fetchMetadata])
+  }, [url, fetchMetadata, prefetchedMetadata])
 
-  const domain = metadata?.domain ?? new URL(url).hostname.replace(/^www\./, "")
+  // Safely extract domain with fallback for malformed URLs
+  const domain = metadata?.domain ?? (() => {
+    try { return new URL(url).hostname.replace(/^www\./, "") }
+    catch { return url }
+  })()
 
   return (
     <a
