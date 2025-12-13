@@ -38,7 +38,7 @@ export default async function PostPage({
     <main>
       <SiteHeader />
 
-      <p 
+      <div 
         className="fade-up"
         style={{ 
           fontSize: "12px", 
@@ -58,7 +58,7 @@ export default async function PostPage({
         >
           ← back to all posts
         </Link>
-      </p>
+      </div>
 
     </main>
   )
