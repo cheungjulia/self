@@ -1,11 +1,11 @@
 /**
  * Link metadata utilities for fetching and parsing Open Graph data
  * 
- * Uses open-graph-scraper for robust metadata extraction.
+ * Uses cheerio for lightweight HTML parsing (no jsdom dependency).
  * Runs on the server during SSR/SSG build time.
  */
 
-import ogs from 'open-graph-scraper'
+import * as cheerio from 'cheerio'
 
 export interface LinkMetadata {
   url: string
@@ -15,43 +15,44 @@ export interface LinkMetadata {
 }
 
 /**
- * Fetch metadata for a single URL using open-graph-scraper
+ * Fetch metadata for a single URL using cheerio (lightweight, no jsdom)
  * Handles OG tags, Twitter cards, and fallbacks automatically
  */
 export async function fetchLinkMetadata(url: string): Promise<LinkMetadata> {
   const domain = new URL(url).hostname.replace(/^www\./, "")
   
   try {
-    const { result } = await ogs({ 
-      url,
-      timeout: 10000,
-      fetchOptions: {
-        headers: {
-          'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-        },
+    const response = await fetch(url, {
+      headers: {
+        'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
       },
+      signal: AbortSignal.timeout(10000),
     })
-
-    // open-graph-scraper provides multiple fallback fields
-    const title = result.ogTitle 
-      || result.twitterTitle 
-      || result.dcTitle 
+    
+    if (!response.ok) {
+      return { url, title: extractTitleFromUrl(url), description: null, domain }
+    }
+    
+    const html = await response.text()
+    const $ = cheerio.load(html)
+    
+    // Extract Open Graph and Twitter card metadata
+    const title = $('meta[property="og:title"]').attr('content')
+      || $('meta[name="twitter:title"]').attr('content')
+      || $('title').text()
+      || null
+    
+    const description = $('meta[property="og:description"]').attr('content')
+      || $('meta[name="twitter:description"]').attr('content')
+      || $('meta[name="description"]').attr('content')
       || null
 
-    const description = result.ogDescription 
-      || result.twitterDescription 
-      || result.dcDescription 
-      || null
-
-    // If we got valid metadata, return it
     if (title) {
-      return { url, title, description, domain }
+      return { url, title: title.trim(), description: description?.trim() ?? null, domain }
     }
 
-    // Fallback: extract readable title from URL slug
     return { url, title: extractTitleFromUrl(url), description: null, domain }
   } catch {
-    // On error, try to extract title from URL slug
     return { url, title: extractTitleFromUrl(url), description: null, domain }
   }
 }

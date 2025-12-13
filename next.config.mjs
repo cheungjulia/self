@@ -6,6 +6,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  serverExternalPackages: ['jsdom', 'open-graph-scraper'],
 }
 
 export default nextConfig

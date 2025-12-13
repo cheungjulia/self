@@ -7,7 +7,6 @@ import Link from "next/link"
 import Image from "next/image"
 import React from "react"
 import parse, { Element, type HTMLReactParserOptions } from "html-react-parser"
-import DOMPurify from "isomorphic-dompurify"
 
 interface BlogPostProps {
   post: BlogPost
@@ -20,14 +19,46 @@ interface BlogPostProps {
 const ALLOWED_TAGS = ['b', 'i', 'em', 'strong', 'u', 'br', 'img', 'a', 'span']
 const ALLOWED_ATTR = ['href', 'src', 'alt', 'width', 'height', 'target', 'rel', 'class']
 
+// Simple server-safe HTML sanitizer (avoids jsdom dependency issues)
+// Only allows safe inline formatting tags
+function sanitizeHtml(html: string): string {
+  // Create regex patterns for allowed tags
+  const allowedTagPattern = ALLOWED_TAGS.join('|')
+  const allowedAttrPattern = ALLOWED_ATTR.join('|')
+  
+  // Remove all tags except allowed ones
+  // First, temporarily mark allowed tags
+  let result = html
+  
+  // Match allowed opening tags with their attributes
+  const openTagRegex = new RegExp(`<(${allowedTagPattern})(\\s+(?:${allowedAttrPattern})="[^"]*")*\\s*/?>`, 'gi')
+  const closeTagRegex = new RegExp(`</(${allowedTagPattern})>`, 'gi')
+  
+  // Extract and preserve allowed tags
+  const preserved: string[] = []
+  result = result.replace(openTagRegex, (match) => {
+    preserved.push(match)
+    return `\x00${preserved.length - 1}\x00`
+  })
+  result = result.replace(closeTagRegex, (match) => {
+    preserved.push(match)
+    return `\x00${preserved.length - 1}\x00`
+  })
+  
+  // Strip all remaining HTML tags
+  result = result.replace(/<[^>]*>/g, '')
+  
+  // Restore preserved tags
+  result = result.replace(/\x00(\d+)\x00/g, (_, idx) => preserved[parseInt(idx)])
+
+  return result
+}
+
 // Parse inline HTML tags into React elements using html-react-parser
-// Sanitized with DOMPurify to prevent XSS attacks
+// Sanitized to prevent XSS attacks
 const parseInlineFormatting = (text: string): React.ReactNode => {
   // Sanitize HTML to only allow safe tags
-  const sanitized = DOMPurify.sanitize(text, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-  })
+  const sanitized = sanitizeHtml(text)
 
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
