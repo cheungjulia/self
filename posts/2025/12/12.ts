@@ -30,4 +30,15 @@ export const post: RawPost = {
     "https://www.jasonwei.net/blog/emergence",
     "https://x.com/_jasonwei/status/1939762496757539297",
   ],
+  followups: [
+      {
+        date: "December 13, 2025",
+        content: `ok so coming out of exploring some neurips papers, new researching showing scaling depth in RLs to enable new goal-reaching capabilities
+        https://wang-kevin3290.github.io/scaling-crl/
+        "Whereas most RL papers in recent years have relied on shallow architectures (around 2 -- 5 layers), we demonstrate that increasing the depth up to 1024 layers can significantly boost performance. Our experiments are conducted in an unsupervised goal-conditioned setting, where no demonstrations or rewards are provided, so an agent must explore (from scratch) and learn how to maximize the likelihood of reaching commanded goals"
+        - could this be a powerful implication for robotics and embodied AI space?
+        `,
+        sources: ["https://neurips.cc/virtual/2025/loc/san-diego/poster/115731"]
+      },
+    ],
 }

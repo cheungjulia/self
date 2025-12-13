@@ -23,6 +23,7 @@ export const post: RawPost = {
     "https://neurips.cc/virtual/2025/awards_detail",
     "https://github.com/liweijiang/artificial-hivemind",
     "https://openreview.net/forum?id=saDOrrnNTz",
+    "i was just informed that this tv show basically exhibits this paper: https://en.wikipedia.org/wiki/Pluribus_(TV_series)",
     "totally not that relevant research, will talk more about this another day but it's funny that models are nondeterministic mathematically but somehow we're getting the same vibe of results. honestly totally makes sense, meets statistical expectation but =! ideal behaviour: https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/"
   ],
 }
