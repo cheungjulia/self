@@ -15,6 +15,69 @@ export interface LinkMetadata {
 }
 
 /**
+ * Fetch YouTube video title via oEmbed API (no auth required)
+ */
+async function fetchYouTubeMetadata(url: string): Promise<LinkMetadata | null> {
+  try {
+    const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`
+    const response = await fetch(oembedUrl, { signal: AbortSignal.timeout(5000) })
+    if (!response.ok) return null
+    
+    const data = await response.json()
+    return {
+      url,
+      title: data.title || null,
+      description: data.author_name ? `by ${data.author_name}` : null,
+      domain: 'youtube.com',
+    }
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Fetch X/Twitter post info via publish API (no auth required)
+ */
+async function fetchXMetadata(url: string): Promise<LinkMetadata | null> {
+  try {
+    const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(url)}&omit_script=true`
+    const response = await fetch(oembedUrl, { signal: AbortSignal.timeout(5000) })
+    if (!response.ok) return null
+    
+    const data = await response.json()
+    // Extract text from the HTML response, truncate for preview
+    const htmlContent = data.html || ''
+    const $ = cheerio.load(htmlContent)
+    const tweetText = $('p').first().text().trim()
+    
+    return {
+      url,
+      title: tweetText ? (tweetText.length > 80 ? tweetText.slice(0, 77) + '...' : tweetText) : null,
+      description: data.author_name ? `@${data.author_name}` : null,
+      domain: 'x.com',
+    }
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Check if URL is a YouTube video
+ */
+function isYouTubeUrl(url: string): boolean {
+  const hostname = new URL(url).hostname
+  return hostname.includes('youtube.com') || hostname.includes('youtu.be')
+}
+
+/**
+ * Check if URL is an X/Twitter post
+ */
+function isXUrl(url: string): boolean {
+  const hostname = new URL(url).hostname
+  return hostname.includes('twitter.com') || hostname.includes('x.com')
+}
+
+/**
  * Fetch metadata for a single URL using cheerio (lightweight, no jsdom)
  * Handles OG tags, Twitter cards, and fallbacks automatically
  */
@@ -22,6 +85,18 @@ export async function fetchLinkMetadata(url: string): Promise<LinkMetadata> {
   const domain = new URL(url).hostname.replace(/^www\./, "")
   
   try {
+    // Use oEmbed APIs for sites that don't expose meta tags well
+    if (isYouTubeUrl(url)) {
+      const ytMeta = await fetchYouTubeMetadata(url)
+      if (ytMeta) return ytMeta
+    }
+    
+    if (isXUrl(url)) {
+      const xMeta = await fetchXMetadata(url)
+      if (xMeta) return xMeta
+    }
+    
+    // Generic: fetch HTML and parse meta tags
     const response = await fetch(url, {
       headers: {
         'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
