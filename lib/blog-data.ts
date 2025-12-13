@@ -1,4 +1,5 @@
-// Follow-up thought/comment on a post
+import { posts } from "@/posts"
+
 export interface FollowUp {
   date: string       // e.g., "December 5, 2025"
   time?: string      // e.g., "3:30 PM"
@@ -24,8 +25,6 @@ export interface BlogPost extends BasePost {
   id: string
   date: string
 }
-
-import { posts } from "@/posts"
 
 export function getAllPosts(): BlogPost[] {
   return [...posts].sort((a, b) => {

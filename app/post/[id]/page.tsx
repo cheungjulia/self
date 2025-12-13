@@ -45,6 +45,7 @@ export default async function PostPage({
           marginBottom: "32px",
         }}
       >
+        <BlogPostComponent post={post} isFullView metadataMap={metadataMap} />
         <Link 
           href="/"
           style={{
@@ -59,9 +60,6 @@ export default async function PostPage({
         </Link>
       </p>
 
-      <BlogPostComponent post={post} isFullView metadataMap={metadataMap} />
-
-      <SiteFooter />
     </main>
   )
 }
