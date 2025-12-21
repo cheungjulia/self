@@ -23,4 +23,14 @@ export const post: RawPost = {
     "https://en.wikipedia.org/wiki/Colorless_green_ideas_sleep_furiously",
     "im obssessed with these: http://archives.conlang.info/ga/farzhi/shiarweilwoen.html"
   ],
+  followups: [
+    {
+      date: "December 21, 2025",
+      content: "chinese as a more efficient language than english -- not all languages created equal, and definitely no encoded equally.",
+      sources: [
+        "https://x.com/mandate2049/status/1999281975119458452?s=20",
+        "https://medium.com/data-science/all-languages-are-not-created-tokenized-equal-cd87694a97c1"
+      ]
+    }
+  ],
 }
