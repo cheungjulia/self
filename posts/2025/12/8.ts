@@ -31,6 +31,13 @@ export const post: RawPost = {
         "https://x.com/mandate2049/status/1999281975119458452?s=20",
         "https://medium.com/data-science/all-languages-are-not-created-tokenized-equal-cd87694a97c1"
       ]
+    },
+    {
+      date: "December 22, 2025",
+      content: `or... maybe LLM language... /is/ a form of intelligence?
+      https://x.com/IntuitMachine/status/2000868699633279169
+      though i think it's more of a framing problem -- most people see it as "autocomplete" or "next token prediction", but more so it follows weighted paths and these weights are determined on patterns found in a text, learning language rules.
+      `,
     }
   ],
 }

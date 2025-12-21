@@ -40,5 +40,16 @@ export const post: RawPost = {
         `,
         sources: ["https://neurips.cc/virtual/2025/loc/san-diego/poster/115731"]
       },
+      {
+        date: "December 21, 2025",
+        content: `
+        https://x.com/robertwiblin/status/2001980117199868090?s=20
+        defining consciousness, the priors: unthreading qualia, self-awareness, agency, sentience, all these terms
+
+        https://royalsocietypublishing.org/rsfs/article/15/6/20250036/366154/Evolution-by-natural-induction-II-further
+        natural selection, natural induction:
+        <i>"It is conventionally assumed that all evolutionary adaptation is produced, and could only possibly be produced, by natural selection. Natural induction is a different mechanism of adaptation. It occurs in dynamical systems described by a network of interactions, where connections give way slightly under stress and the system is subject to occasional perturbations. This differential adjustment of connections causes reorganization of the system’s internal structure in a manner equivalent to associative learning familiar in neural networks. This is sufficient for storage and recall of multiple patterns, learning with generalization and solving difficult constraint problems (without any natural selection involved). Various biological systems (from gene-regulation networks to metabolic networks to ecosystems) meet these basic conditions and therefore have potential to exhibit adaptation by natural induction. Here (and in a follow-on paper), we consider various ways that natural induction and natural selection might interact in biological evolution. For example, in some cases, natural selection may act not as a source of adaptations but as a memory of adaptations discovered by natural induction. We conclude that evolution by natural induction is a viable process that expands our understanding of evolutionary adaptation."</i>
+        `,
+      }
     ],
 }
