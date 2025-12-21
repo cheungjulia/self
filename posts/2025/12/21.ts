@@ -15,9 +15,9 @@ export const post: RawPost = {
   - <b>exoskeleton legs for hiking and elderly:</b> tried this after hiking for 5 hours on a hurt ankle, and wow i felt light as a feather. it's meant for elderly and hurt, but they beta released this to big hiking spots in the country (zhangjiajie).
   - <b>drink fridges (not just vending machines):</b> where you can unlock with your phone, grab your drink, and leave -- it auto-detects what drinks youve taken (zhangjiajie)
   - <b>limited smartwatches for kids (xiao tian cai):</b> noticed a lot of kids wearing these -- it has location tracking, can create communication channels with two-way consented individuals (e.g. parents), stripped down version of alipay, little camera (saw twins taking photos of trees with it!) 
-  - and then ofc <b>facial recognition, phone integration, and ID linkage:</b> every ticket into a tourist location linked to your identity, cameras at danger spots (e.g. 10km into a hike, or at a hard crossing in via ferrata), entering spots with only your face (zhangjiajie). side note -- toilets everywhere!
-  - <b> niche machines:</b> ceramic pot to roast sweet potatoes with a thermometer outside, and racks lining the side. sugarcane chopper machine. there's a product for everything (and can be found on taobao for pretty cheap!)
-  -<b> and then ofc LLMs!</b>: angry tourist on the train speaking to a worker, uses LLM (i think doubao from over the shoulder peeping) for translation and assistance.
+  - <b>facial recognition, phone integration, and ID linkage:</b> every ticket into a tourist location linked to your identity, cameras at danger spots (e.g. 10km into a hike, or at a hard crossing in via ferrata), entering spots with only your face (zhangjiajie). side note -- toilets everywhere!
+  - <b>niche machines:</b> ceramic pot to roast sweet potatoes with a thermometer outside, and racks lining the side. sugarcane chopper machine. there's a product for everything (and can be found on taobao for pretty cheap!)
+  - <b>and then ofc LLMs!</b>: angry tourist on the train speaking to a worker, uses LLM (i think doubao from over the shoulder peeping) for translation and assistance.
   `,
   sources: [
     "https://www.chathamhouse.org/publications/the-world-today/2025-12/can-west-recover-chinas-hi-tech-knockout-blow",
