@@ -19,7 +19,7 @@ import { post as post20251124 } from "./2025/11/24"
 import { post as post20251123 } from "./2025/11/23"
 
 export const posts: BlogPost[] = [
-  { id: "2025-12-22", date: "December 22, 2025", time: "7:37 PM", ...post20251222 },
+  { id: "2025-12-22", date: "December 22, 2025", time: "7:29 AM", ...post20251222 },
   { id: "2025-12-21", date: "December 21, 2025", time: "7:53 AM", ...post20251221 },
   { id: "2025-12-13", date: "December 13, 2025", time: "8:57 AM", ...post20251213 },
   { id: "2025-12-12", date: "December 12, 2025", time: "9:04 AM", ...post20251212 },
